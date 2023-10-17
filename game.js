@@ -1,0 +1,323 @@
+    // Creating variables
+let canvasX=1535,canvasY=721;
+let myX=0,myY=0,pol=[],bx=[],by=[],bdx=[],bdy=[],bs=0,ups=0,ims=['white',arrowLeft,arrowUp,arrowRight, arrowDown],klr=20,fx=[],fy=[],zr=[],fp=[],px1=[],py1=[],px2=[],py2=[],pc=['black','orange','green','red', 'blue'],fs=5,bt=[],st=0,tx=[],ty=[],score=1000,cx=0,cy=0,mx=1000,my=1000,mklr=2,lx=[],ly=[];
+for(x=-1;x<=mx/klr+1;x++){
+    pol[x]=[]
+    for(y=-1;y<=my/klr+1;y++){
+        if(randomInteger(30)==0){
+            pol[x][y]=randomInteger(5)
+        }else{
+            pol[x][y]=0
+        }   
+    }
+}   
+for(f=0;f<fs;f++){  
+    fx[f]=randomInteger(mx/klr-4)+2
+    fy[f]=randomInteger(my/klr-4)+2
+    fp[f]=randomInteger(4)+1
+}
+for(p=0;p<fs;p++){  
+    px1[p]=randomInteger(mx/klr-4)+2
+    py1[p]=randomInteger(my/klr-4)+2
+    px2[p]=randomInteger(mx/klr-4)+2
+    py2[p]=randomInteger(my/klr-4)+2
+}
+for(t=0;t<5;t++){  
+    tx[t]=randomInteger(mx/klr-4)+2
+    ty[t]=randomInteger(my/klr-4)+2  
+}
+for(l=0;l<fs;l++){  
+    lx[l]=randomInteger(mx/klr-4)+2
+    ly[l]=randomInteger(my/klr-4)+2  
+}
+function update() {
+	// Napisanoto tuk se izpulnqva otnovo i otnovo mnogo puti v sekunda
+    if(st==1){
+    if(cx<0){
+        cx=0
+    }
+    if(cy<0){
+        cy=0
+    }
+    if(cx>(mx-800)/klr){
+        cx=(mx-800)/klr
+    }
+    if(cy>(my-600)/klr){
+        cy=(my-600)/klr
+    }
+    ups++
+    if(ups%100==0){
+        if(score>=10){
+            score-=10
+            for(f=0;f<fs;f++){
+                bx[bs]=fx[f]
+                by[bs]=fy[f]
+                bt[bs]=5
+                p=fp[f]
+               /* bx[bs]=randomInteger(6)+5
+                by[bs]=randomInteger(4)+4
+                bdx[bs]=0
+                bdy[bs]=0
+                let p=randomInteger(4)+1*/
+                if(p==1){
+                    bdx[bs]=-1
+                    bdy[bs]=0
+                }
+                if(p==2){
+                    bdx[bs]=0
+                    bdy[bs]=-1
+                }
+                if(p==3){
+                    bdx[bs]=1
+                    bdy[bs]=0
+                }
+                if(p==4){
+                    bdx[bs]=0
+                    bdy[bs]=1
+                }
+                bs++
+            }
+        }
+    }
+    if(ups%25==0){
+        for(b=0;b<bs;b++){
+            for(p=0;p<fs;p++){  
+                if(bx[b]==px1[p]&&by[b]==py1[p]){
+                    bx[b]=px2[p]
+                    by[b]=py2[p]
+                    p++
+                    bt[b]=p-1
+                }
+                if(bx[b]==px2[p]&&by[b]==py2[p]){
+                    bx[b]=px1[p]
+                    by[b]=py1[p]
+                    p++
+                    bt[b]=p-1
+                }
+            }
+            for(t=0;t<fs;t++){  
+                if(bx[b]==tx[t]&&by[b]==ty[t]){
+                    if(t==bt[b]){
+                        score+=15
+                    }
+                    bx[b]=bx[bs-1]
+                    by[b]=by[bs-1]
+                    bdy[b]=bdy[bs-1]
+                    bdx[b]=bdx[bs-1]
+                    bt[b]=bt[bs-1]
+                    bs--
+                }
+            }
+            for(l=0;l<fs;l++){  
+                if(bx[b]==lx[l]&&by[b]==ly[l]){
+                    bx[b]=bx[bs-1]
+                    by[b]=by[bs-1]
+                    bdy[b]=bdy[bs-1]
+                    bdx[b]=bdx[bs-1]
+                    bt[b]=bt[bs-1]
+                    bs--
+                }
+            }
+            for(f=0;f<fs;f++){  
+                if(bx[b]==fx[f]&&by[b]==fy[f]){
+                    bt[b]=5
+                }
+            }
+            bx[b]+=bdx[b]
+            by[b]+=bdy[b]
+            for(let b2=0;b2<bs;b2++){
+                if(b==b2){
+                    b2++
+                }else{
+                    if(bx[b]==bx[b2]){
+                        if(by[b]==by[b2]){
+                            bx[b]=bx[bs-1]
+                            by[b]=by[bs-1]
+                            bdy[b]=bdy[bs-1]
+                            bdx[b]=bdx[bs-1]
+                            bt[b]=bt[bs-1]
+                            bs--
+                            bx[b2]=bx[bs-1]
+                            by[b2]=by[bs-1]
+                            bdy[b2]=bdy[bs-1]
+                            bdx[b2]=bdx[bs-1]
+                            bt[b2]=bt[bs-1]
+                            bs--
+                        }
+                    }
+                }
+            }
+            if(pol[bx[b]][by[b]]>0){
+                let p=pol[bx[b]][by[b]]
+                if(p==1){
+                    bdx[b]=-1
+                    bdy[b]=0
+                }
+                if(p==2){
+                    bdx[b]=0
+                    bdy[b]=-1
+                }
+                if(p==3){
+                    bdx[b]=1
+                    bdy[b]=0
+                }
+                if(p==4){
+                    bdx[b]=0
+                    bdy[b]=1
+                }
+            }
+            if(bx[b]>mx/klr){
+                bx[b]=bx[bs-1]
+                by[b]=by[bs-1]
+                bdy[b]=bdy[bs-1]
+                bdx[b]=bdx[bs-1]
+                bt[b]=bt[bs-1]
+                bs--
+            }
+            if(bx[b]<0){
+                bx[b]=bx[bs-1]
+                by[b]=by[bs-1]
+                bdy[b]=bdy[bs-1]
+                bdx[b]=bdx[bs-1]
+                bt[b]=bt[bs-1]
+                bs--
+            }
+            if(by[b]>my/klr){
+                bx[b]=bx[bs-1]
+                by[b]=by[bs-1]
+                bdy[b]=bdy[bs-1]
+                bdx[b]=bdx[bs-1]
+                bt[b]=bt[bs-1]
+                bs--
+            }
+            if(by[b]<0){
+                bx[b]=bx[bs-1]
+                by[b]=by[bs-1]
+                bdy[b]=bdy[bs-1]
+                bdx[b]=bdx[bs-1]
+                bt[b]=bt[bs-1]
+                bs--
+            }
+        }
+            /*for(b2=0;b2<bs;b2++){
+                if(b==b2){}else{    
+                    if(bx[b]==bx[b2]&&by[b]==by[b2]){
+                        bx[b]=bx[bs-1]
+                        by[b]=by[bs-1]
+                        bdy[b]=bdy[bs-1]
+                        b   dx[b]=bdx[bs-1]
+                        bs--
+                        bx[b2]=bx[bs-1]
+                        by[b2]=by[bs-1]
+                        bdy[b2]=bdy[bs-1]
+                        bdx[b2]=bdx[bs-1]
+                        bs--
+                    }
+                }
+            }*/
+    }
+}
+};
+function draw() {
+	// tuk naprogramirai kakvo da se risuva
+    if(st==1){
+    context.font="30px Arial"
+    context.fillText(score,700,30)
+            //context.strokeStyle='blue'
+        /*context.moveTo(cx,cy)
+        context.lineTo(cx,cy+600/klr)
+        context.lineTo(cx+800/klr,cy+600/klr)
+        context.lineTo(cx+800/klr,cy)
+        context.stroke()*/
+            for(f=0;f<fs;f++){
+                drawImage(building[3],(fx[f]*mklr),(fy[f]*mklr),mklr,mklr)
+            }  
+            for(l=0;l<5;l++){
+                drawImage(lava2,(lx[l])*mklr,(ly[l])*mklr,mklr,mklr)
+            }      
+            for(p=0;p<fs;p++){  
+                context.fillStyle=pc[p]
+                context.fillRect((px1[p]*mklr),(py1[p]*mklr),mklr,mklr)
+                context.fillRect((px2[p]*mklr),(py2[p]*mklr),mklr,mklr)
+            }   
+            for(t=0;t<fs;t++){  
+                context.fillStyle=pc[t]
+                context.fillRect((tx[t]*mklr),(ty[t]*mklr),mklr,mklr)
+                drawImage(jelly[t],(tx[t]*mklr),(ty[t]*mklr),mklr,mklr)
+            }
+            for(x=0;x<=mx/klr;x++){
+                for(y=0;y<=my/klr;y++){
+                    if(pol[x][y]>0){
+                        drawImage(ims[pol[x][y]],(x*mklr),(y*mklr),mklr,mklr)
+                    }
+
+                }
+            }
+                for(b=0;b<bs;b++){
+                    drawImage(jelly[bt[b]],(bx[b]*mklr),(by[b]*mklr),mklr,mklr)
+                }
+
+        
+    for(f=0;f<fs;f++){
+        drawImage(building[3],(fx[f]-cx)*klr,(fy[f]-cy)*klr,klr,klr)
+    }   
+    for(l=0;l<5;l++){
+        drawImage(lava2,(lx[l]-cx)*klr,(ly[l]-cy)*klr,klr,klr)
+    }   
+    for(p=0;p<fs;p++){  
+        context.fillStyle=pc[p]
+        context.fillRect((px1[p]-cx)*klr,(py1[p]-cy)*klr,klr,klr)
+        context.fillRect((px2[p]-cx)*klr,(py2[p]-cy)*klr,klr,klr)
+    }   
+    for(t=0;t<fs;t++){  
+        context.fillStyle=pc[t]
+        context.fillRect((tx[t]-cx)*klr,(ty[t]-cy)*klr,klr,klr)
+        drawImage(jelly[t],(tx[t]-cx)*klr,(ty[t]-cy)*klr,klr,klr)
+    }
+    for(x=0;x<=mx/klr;x++){
+        for(y=0;y<=my/klr;y++){
+            if(pol[x][y]>0){
+                drawImage(ims[pol[x][y]],(x-cx)*klr,(y-cy)*klr,klr,klr)
+            }
+
+        }
+    }
+        for(b=0;b<bs;b++){
+            drawImage(jelly[bt[b]],(bx[b]-cx)*klr,(by[b]-cy)*klr,klr,klr)
+        }
+        /*for(b=0;b<fs;b++){
+            drawImage(jelly[1],bx[b]*50,by[b]*50,50,50)
+        }*/
+    }else if(st==0){
+        drawImage(startScreen,0-cx*klr,0-cy*klr,800,600)
+        drawImage(easteregg,800-cx*klr,600-cy*klr,600,600)
+    }else if(st==2){
+        drawImage(controls,-cx*klr,0-cy*klr,800,600)
+        drawImage(easteregg,800-cx*klr,600-cy*klr,600,600)
+    }
+}
+
+function keyup(key) {
+	// Show the pressed keycode in the console
+    if(st==2||st==0){
+        if(key==32){
+            st=1
+        }
+    }
+    if(st==0){
+        if(key==67){
+            st=2
+        }
+    }
+    if(key==87){cy--}
+    if(key==83){cy++}
+    if(key==65){cx--}
+    if(key==68){cx++}
+}
+function mouseup() {
+	// Show coordinates of mouse on click
+    pol[Math.floor((mouseX)/klr+cx)][Math.floor((mouseY)/klr+cy)]++
+    if(pol[Math.floor((mouseX)/klr+cx)][Math.floor((mouseY)/klr+cy)]>=5){
+        pol[Math.floor((mouseX)/klr+cx)][Math.floor((mouseY)/klr+cy)]=0
+    }
+}
